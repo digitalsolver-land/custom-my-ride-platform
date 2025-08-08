@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +23,13 @@ export default function ContactPage() {
     timeline_months: '',
     description: ''
   });
+
+  const { data: serviceTypesData } = useQuery({
+    queryKey: ['service-types'],
+    queryFn: () => backend.service.listServiceTypes()
+  });
+
+  const serviceTypes = serviceTypesData?.service_types || [];
 
   const createRequestMutation = useMutation({
     mutationFn: (data: any) => backend.service.createServiceRequest(data),
@@ -56,6 +63,15 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!formData.service_type_id || !formData.client_name || !formData.client_email) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs obligatoires.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const submitData = {
       ...formData,
       service_type_id: parseInt(formData.service_type_id),
@@ -129,18 +145,20 @@ export default function ContactPage() {
                     <div className="space-y-2">
                       <Label htmlFor="service_type_id">Type de service *</Label>
                       <Select
-                        value={formData.service_type_id}
-                        onValueChange={(value) => handleInputChange('service_type_id', value)}
+                        value={formData.service_type_id || 'none'}
+                        onValueChange={(value) => handleInputChange('service_type_id', value === 'none' ? '' : value)}
                         required
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionnez un service" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="1">Restauration Complète</SelectItem>
-                          <SelectItem value="2">Acquisition sur Commande</SelectItem>
-                          <SelectItem value="3">Expertise et Évaluation</SelectItem>
-                          <SelectItem value="4">Maintenance Spécialisée</SelectItem>
+                          <SelectItem value="none" disabled>Sélectionnez un service</SelectItem>
+                          {serviceTypes.map((serviceType) => (
+                            <SelectItem key={serviceType.id} value={serviceType.id.toString()}>
+                              {serviceType.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>

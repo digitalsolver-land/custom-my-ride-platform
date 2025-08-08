@@ -180,14 +180,14 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
         <div className="space-y-2">
           <Label>Pays d'origine</Label>
           <Select
-            value={filters.country_id?.toString() || ''}
-            onValueChange={(value) => handleFilterChange('country_id', value ? parseInt(value) : undefined)}
+            value={filters.country_id?.toString() || 'all'}
+            onValueChange={(value) => handleFilterChange('country_id', value === 'all' ? undefined : parseInt(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Tous les pays" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Tous les pays</SelectItem>
+              <SelectItem value="all">Tous les pays</SelectItem>
               {countries.map((country) => (
                 <SelectItem key={country.id} value={country.id.toString()}>
                   {country.flag_emoji} {country.name}
@@ -201,14 +201,14 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
         <div className="space-y-2">
           <Label>Marque</Label>
           <Select
-            value={filters.brand_id?.toString() || ''}
-            onValueChange={(value) => handleFilterChange('brand_id', value ? parseInt(value) : undefined)}
+            value={filters.brand_id?.toString() || 'all'}
+            onValueChange={(value) => handleFilterChange('brand_id', value === 'all' ? undefined : parseInt(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Toutes les marques" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Toutes les marques</SelectItem>
+              <SelectItem value="all">Toutes les marques</SelectItem>
               {brands.map((brand) => (
                 <SelectItem key={brand.id} value={brand.id.toString()}>
                   {brand.name}
@@ -222,14 +222,14 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
         <div className="space-y-2">
           <Label>Type de véhicule</Label>
           <Select
-            value={filters.type_id?.toString() || ''}
-            onValueChange={(value) => handleFilterChange('type_id', value ? parseInt(value) : undefined)}
+            value={filters.type_id?.toString() || 'all'}
+            onValueChange={(value) => handleFilterChange('type_id', value === 'all' ? undefined : parseInt(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Tous les types" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Tous les types</SelectItem>
+              <SelectItem value="all">Tous les types</SelectItem>
               {types.map((type) => (
                 <SelectItem key={type.id} value={type.id.toString()}>
                   {type.name}
@@ -287,14 +287,14 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
         <div className="space-y-2">
           <Label>Niveau de rareté</Label>
           <Select
-            value={filters.rarity_level?.toString() || ''}
-            onValueChange={(value) => handleFilterChange('rarity_level', value ? parseInt(value) : undefined)}
+            value={filters.rarity_level?.toString() || 'all'}
+            onValueChange={(value) => handleFilterChange('rarity_level', value === 'all' ? undefined : parseInt(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Tous niveaux" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Tous niveaux</SelectItem>
+              <SelectItem value="all">Tous niveaux</SelectItem>
               <SelectItem value="1">⭐ Commune</SelectItem>
               <SelectItem value="2">⭐⭐ Peu commune</SelectItem>
               <SelectItem value="3">⭐⭐⭐ Rare</SelectItem>
