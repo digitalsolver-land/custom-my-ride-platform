@@ -1,4 +1,4 @@
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -26,10 +26,6 @@ export default function HeroSection() {
                 Découvrir le Catalogue
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-black text-lg px-8 py-4">
-              <Play className="mr-2 h-5 w-5" />
-              Voir nos Réalisations
             </Button>
           </div>
 
