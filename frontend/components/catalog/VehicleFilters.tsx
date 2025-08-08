@@ -21,7 +21,14 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
 
   const { data: brandsData } = useQuery({
     queryKey: ['brands', filters.country_id],
-    queryFn: () => backend.vehicle.listBrands({ country_id: filters.country_id })
+    queryFn: () => backend.vehicle.listBrands({ country_id: filters.country_id }),
+    enabled: !!filters.country_id
+  });
+
+  const { data: allBrandsData } = useQuery({
+    queryKey: ['all-brands'],
+    queryFn: () => backend.vehicle.listBrands({}),
+    enabled: !filters.country_id
   });
 
   const { data: typesData } = useQuery({
@@ -30,7 +37,7 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
   });
 
   const countries = countriesData?.countries || [];
-  const brands = brandsData?.brands || [];
+  const brands = filters.country_id ? (brandsData?.brands || []) : (allBrandsData?.brands || []);
   const types = typesData?.types || [];
 
   const handleFilterChange = (key: string, value: any) => {
@@ -126,7 +133,6 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
           <Select
             value={filters.brand_id?.toString() || ''}
             onValueChange={(value) => handleFilterChange('brand_id', value ? parseInt(value) : undefined)}
-            disabled={!filters.country_id}
           >
             <SelectTrigger>
               <SelectValue placeholder="Toutes les marques" />

@@ -37,11 +37,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-red-500">Catalogue</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/catalogue?country=DE" className="text-gray-400 hover:text-white transition-colors">Voitures Allemandes</Link></li>
-              <li><Link to="/catalogue?country=IT" className="text-gray-400 hover:text-white transition-colors">Voitures Italiennes</Link></li>
-              <li><Link to="/catalogue?country=FR" className="text-gray-400 hover:text-white transition-colors">Voitures Françaises</Link></li>
-              <li><Link to="/catalogue?country=GB" className="text-gray-400 hover:text-white transition-colors">Voitures Anglaises</Link></li>
-              <li><Link to="/catalogue?country=US" className="text-gray-400 hover:text-white transition-colors">Voitures Américaines</Link></li>
+              <li><Link to="/catalogue?country=1" className="text-gray-400 hover:text-white transition-colors">Voitures Allemandes</Link></li>
+              <li><Link to="/catalogue?country=2" className="text-gray-400 hover:text-white transition-colors">Voitures Italiennes</Link></li>
+              <li><Link to="/catalogue?country=3" className="text-gray-400 hover:text-white transition-colors">Voitures Françaises</Link></li>
+              <li><Link to="/catalogue?country=4" className="text-gray-400 hover:text-white transition-colors">Voitures Anglaises</Link></li>
+              <li><Link to="/catalogue?country=5" className="text-gray-400 hover:text-white transition-colors">Voitures Américaines</Link></li>
             </ul>
           </div>
 
