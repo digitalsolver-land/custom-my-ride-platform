@@ -1,0 +1,8 @@
+-- Insert sample restoration projects for testing
+INSERT INTO restoration_projects (project_name, vehicle_make, vehicle_model, vehicle_year, status, progress_percentage, description, after_images) VALUES
+('Restauration Porsche 911 Carrera', 'Porsche', '911 Carrera', 1973, 'completed', 100, 'Restauration complète d''une Porsche 911 Carrera 1973 avec remise à neuf du moteur et de la carrosserie.', '["https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3"]'),
+('Remise en état BMW E30 M3', 'BMW', 'E30 M3', 1988, 'completed', 100, 'Restauration d''une BMW E30 M3 avec conservation de l''authenticité d''origine.', '["https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3"]'),
+('Restauration Ferrari 308 GTB', 'Ferrari', '308 GTB', 1978, 'completed', 100, 'Restauration complète d''une Ferrari 308 GTB avec attention particulière à la mécanique.', '["https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3"]'),
+('Jaguar E-Type Series 1', 'Jaguar', 'E-Type', 1965, 'completed', 100, 'Restauration d''une Jaguar E-Type Series 1 avec remise à neuf complète.', '["https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3"]'),
+('Alpine A110 1600S', 'Alpine', 'A110', 1972, 'in_progress', 75, 'Restauration en cours d''une Alpine A110 1600S de rallye.', '["https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3"]'),
+('Corvette Stingray C3', 'Chevrolet', 'Corvette', 1969, 'completed', 100, 'Restauration d''une Corvette Stingray C3 avec moteur V8 big block.', '["https://images.unsplash.com/photo-1544636331-e26879cd4d9b?ixlib=rb-4.0.3"]');

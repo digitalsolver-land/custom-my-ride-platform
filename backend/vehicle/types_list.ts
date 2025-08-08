@@ -10,13 +10,18 @@ interface ListVehicleTypesResponse {
 export const listVehicleTypes = api<void, ListVehicleTypesResponse>(
   { expose: true, method: "GET", path: "/vehicle-types" },
   async () => {
-    const types = await vehicleDB.queryAll<VehicleType>`
-      SELECT DISTINCT vt.* 
-      FROM vehicle_types vt
-      JOIN vehicles v ON vt.id = v.type_id
-      ORDER BY vt.name
-    `;
+    try {
+      const types = await vehicleDB.queryAll<VehicleType>`
+        SELECT DISTINCT vt.* 
+        FROM vehicle_types vt
+        JOIN vehicles v ON vt.id = v.type_id
+        ORDER BY vt.name
+      `;
 
-    return { types };
+      return { types };
+    } catch (error) {
+      console.error('Error in listVehicleTypes:', error);
+      throw error;
+    }
   }
 );

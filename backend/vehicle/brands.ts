@@ -15,25 +15,30 @@ interface ListBrandsResponse {
 export const listBrands = api<ListBrandsParams, ListBrandsResponse>(
   { expose: true, method: "GET", path: "/brands" },
   async (params) => {
-    let brands;
-    
-    if (params.country_id) {
-      brands = await vehicleDB.queryAll<Brand>`
-        SELECT DISTINCT b.* 
-        FROM brands b
-        JOIN vehicles v ON b.id = v.brand_id
-        WHERE b.country_id = ${params.country_id}
-        ORDER BY b.name
-      `;
-    } else {
-      brands = await vehicleDB.queryAll<Brand>`
-        SELECT DISTINCT b.* 
-        FROM brands b
-        JOIN vehicles v ON b.id = v.brand_id
-        ORDER BY b.name
-      `;
-    }
+    try {
+      let brands;
+      
+      if (params.country_id) {
+        brands = await vehicleDB.queryAll<Brand>`
+          SELECT DISTINCT b.* 
+          FROM brands b
+          JOIN vehicles v ON b.id = v.brand_id
+          WHERE b.country_id = ${params.country_id}
+          ORDER BY b.name
+        `;
+      } else {
+        brands = await vehicleDB.queryAll<Brand>`
+          SELECT DISTINCT b.* 
+          FROM brands b
+          JOIN vehicles v ON b.id = v.brand_id
+          ORDER BY b.name
+        `;
+      }
 
-    return { brands };
+      return { brands };
+    } catch (error) {
+      console.error('Error in listBrands:', error);
+      throw error;
+    }
   }
 );

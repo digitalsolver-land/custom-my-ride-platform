@@ -42,22 +42,32 @@ export default function VehicleCatalogPage() {
 
   const { data: vehiclesData, isLoading, error } = useQuery({
     queryKey: ['vehicles', filters, currentPage],
-    queryFn: () => backend.vehicle.listVehicles({
-      ...filters,
-      limit,
-      offset: currentPage * limit
-    }),
-    retry: 1
+    queryFn: async () => {
+      try {
+        console.log('Fetching vehicles with filters:', filters);
+        const result = await backend.vehicle.listVehicles({
+          ...filters,
+          limit,
+          offset: currentPage * limit
+        });
+        console.log('Vehicles result:', result);
+        return result;
+      } catch (err) {
+        console.error('Error fetching vehicles:', err);
+        throw err;
+      }
+    },
+    retry: 2,
+    retryDelay: 1000,
   });
 
   const handleFilterChange = (newFilters: any) => {
+    console.log('Filter change:', newFilters);
     setFilters(newFilters);
     setCurrentPage(0);
   };
 
-  if (error) {
-    console.error('Error loading vehicles:', error);
-  }
+  console.log('Render state:', { isLoading, error, vehiclesData, filters });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,7 +97,20 @@ export default function VehicleCatalogPage() {
               <div className="text-center py-12">
                 <div className="text-gray-400 text-6xl mb-4">⚠️</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Erreur de chargement</h3>
-                <p className="text-gray-600">Impossible de charger les véhicules. Veuillez réessayer.</p>
+                <p className="text-gray-600">
+                  Impossible de charger les véhicules. 
+                  {error instanceof Error && (
+                    <span className="block text-sm mt-2 text-red-600">
+                      Détail: {error.message}
+                    </span>
+                  )}
+                </p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Réessayer
+                </button>
               </div>
             ) : (
               <VehicleGrid

@@ -28,9 +28,14 @@ export default function VehicleGrid({
   const startItem = currentPage * limit + 1;
   const endItem = Math.min((currentPage + 1) * limit, total);
 
+  console.log('VehicleGrid render:', { vehicles, total, hasMore, isLoading, currentPage });
+
   if (isLoading) {
     return (
       <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="h-6 bg-gray-200 rounded w-48 animate-pulse"></div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(limit)].map((_, i) => (
             <div key={i} className="bg-white rounded-lg shadow-lg animate-pulse">
@@ -39,6 +44,7 @@ export default function VehicleGrid({
                 <div className="h-4 bg-gray-300 rounded w-3/4"></div>
                 <div className="h-4 bg-gray-300 rounded w-1/2"></div>
                 <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+                <div className="h-10 bg-gray-300 rounded"></div>
               </div>
             </div>
           ))}
@@ -47,7 +53,7 @@ export default function VehicleGrid({
     );
   }
 
-  if (vehicles.length === 0) {
+  if (!vehicles || vehicles.length === 0) {
     return (
       <div className="text-center py-12">
         <div className="text-gray-400 text-6xl mb-4">🚗</div>
@@ -75,6 +81,10 @@ export default function VehicleGrid({
                 src={vehicle.vehicle_images?.[0]?.url || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3'}
                 alt={vehicle.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3';
+                }}
               />
               <div className="absolute top-4 left-4">
                 <Badge variant="secondary" className="bg-black/80 text-white">

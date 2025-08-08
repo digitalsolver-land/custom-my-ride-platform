@@ -14,26 +14,70 @@ interface VehicleFiltersProps {
 }
 
 export default function VehicleFilters({ filters, onFiltersChange }: VehicleFiltersProps) {
-  const { data: countriesData } = useQuery({
+  const { data: countriesData, isLoading: countriesLoading } = useQuery({
     queryKey: ['countries'],
-    queryFn: () => backend.vehicle.listCountries()
+    queryFn: async () => {
+      try {
+        console.log('Fetching countries...');
+        const result = await backend.vehicle.listCountries();
+        console.log('Countries result:', result);
+        return result;
+      } catch (err) {
+        console.error('Error fetching countries:', err);
+        throw err;
+      }
+    },
+    retry: 2
   });
 
-  const { data: brandsData } = useQuery({
+  const { data: brandsData, isLoading: brandsLoading } = useQuery({
     queryKey: ['brands', filters.country_id],
-    queryFn: () => backend.vehicle.listBrands({ country_id: filters.country_id }),
-    enabled: !!filters.country_id
+    queryFn: async () => {
+      try {
+        console.log('Fetching brands for country:', filters.country_id);
+        const result = await backend.vehicle.listBrands({ country_id: filters.country_id });
+        console.log('Brands result:', result);
+        return result;
+      } catch (err) {
+        console.error('Error fetching brands:', err);
+        throw err;
+      }
+    },
+    enabled: !!filters.country_id,
+    retry: 2
   });
 
-  const { data: allBrandsData } = useQuery({
+  const { data: allBrandsData, isLoading: allBrandsLoading } = useQuery({
     queryKey: ['all-brands'],
-    queryFn: () => backend.vehicle.listBrands({}),
-    enabled: !filters.country_id
+    queryFn: async () => {
+      try {
+        console.log('Fetching all brands...');
+        const result = await backend.vehicle.listBrands({});
+        console.log('All brands result:', result);
+        return result;
+      } catch (err) {
+        console.error('Error fetching all brands:', err);
+        throw err;
+      }
+    },
+    enabled: !filters.country_id,
+    retry: 2
   });
 
-  const { data: typesData } = useQuery({
+  const { data: typesData, isLoading: typesLoading } = useQuery({
     queryKey: ['vehicle-types'],
-    queryFn: () => backend.vehicle.listVehicleTypes()
+    queryFn: async () => {
+      try {
+        console.log('Fetching vehicle types...');
+        const result = await backend.vehicle.listVehicleTypes();
+        console.log('Vehicle types result:', result);
+        return result;
+      } catch (err) {
+        console.error('Error fetching vehicle types:', err);
+        throw err;
+      }
+    },
+    retry: 2
   });
 
   const countries = countriesData?.countries || [];
@@ -48,11 +92,12 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
       newFilters.brand_id = undefined;
     }
     
+    console.log('Filter change in component:', key, value, newFilters);
     onFiltersChange(newFilters);
   };
 
   const clearFilters = () => {
-    onFiltersChange({
+    const clearedFilters = {
       country_id: undefined,
       brand_id: undefined,
       type_id: undefined,
@@ -63,12 +108,37 @@ export default function VehicleFilters({ filters, onFiltersChange }: VehicleFilt
       rarity_level: undefined,
       available_only: true,
       search: undefined,
-    });
+    };
+    console.log('Clearing filters:', clearedFilters);
+    onFiltersChange(clearedFilters);
   };
 
   const activeFiltersCount = Object.values(filters).filter(value => 
     value !== undefined && value !== '' && value !== true
   ).length;
+
+  const isLoading = countriesLoading || brandsLoading || allBrandsLoading || typesLoading;
+
+  if (isLoading) {
+    return (
+      <Card className="sticky top-24">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Filter className="h-5 w-5 mr-2" />
+            Filtres
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4 animate-pulse">
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="sticky top-24">

@@ -10,14 +10,19 @@ interface ListCountriesResponse {
 export const listCountries = api<void, ListCountriesResponse>(
   { expose: true, method: "GET", path: "/countries" },
   async () => {
-    const countries = await vehicleDB.queryAll<Country>`
-      SELECT DISTINCT c.* 
-      FROM countries c
-      JOIN brands b ON c.id = b.country_id
-      JOIN vehicles v ON b.id = v.brand_id
-      ORDER BY c.name
-    `;
+    try {
+      const countries = await vehicleDB.queryAll<Country>`
+        SELECT DISTINCT c.* 
+        FROM countries c
+        JOIN brands b ON c.id = b.country_id
+        JOIN vehicles v ON b.id = v.brand_id
+        ORDER BY c.name
+      `;
 
-    return { countries };
+      return { countries };
+    } catch (error) {
+      console.error('Error in listCountries:', error);
+      throw error;
+    }
   }
 );
